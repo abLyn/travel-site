@@ -1,6 +1,5 @@
 .feature-item {
   position: relative;
-
   padding-bottom: 2.5rem;
 
   @mixin atSmall {
@@ -20,11 +19,11 @@
   &__title {
     font-size: 1.6rem;
     font-weight: 300;
-    margin-bottom: 0.8rem;
-    margin-top: 0.7em;
+    margin-top: .7em;
+    margin-bottom: .8rem;
     text-align: center;
 
-    @mixing atSmall {
+    @mixin atSmall {
       text-align: left;
       margin-top: 1em;
       font-size: 1.875rem;

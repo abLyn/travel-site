@@ -1,6 +1,6 @@
 .headline {
-  font-weight: 300;
   font-size: 1.9rem;
+  font-weight: 300;
   color: $mainBlue;
 
   @mixin atSmall {
@@ -32,8 +32,12 @@
     font-weight: 100;
   }
 
+  strong {
+    font-weight: 400;
+  }
+
   &--b-margin-small {
-    margin-bottom: 0.5em;
+    margin-bottom: .5em;
   }
 
   &--b-margin-large {
