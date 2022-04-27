@@ -3,14 +3,14 @@ class Modal {
     this.injectHTML()
     this.modal = document.querySelector(".modal")
     this.closeIcon = document.querySelector(".modal__close")
-
     this.events()
   }
 
   events() {
     // listen for close click
     this.closeIcon.addEventListener("click", () => this.closeTheModal())
-    //  pushes any key
+
+    // pushes any key
     document.addEventListener("keyup", (e) => this.keyPressHandler(e))
   }
 
@@ -20,12 +20,12 @@ class Modal {
     }
   }
 
-  closeTheModal() {
-    this.modal.classList.remove("modal--is-visible")
-  }
-
   openTheModal() {
     this.modal.classList.add("modal--is-visible")
+  }
+
+  closeTheModal() {
+    this.modal.classList.remove("modal--is-visible")
   }
 
   injectHTML() {
