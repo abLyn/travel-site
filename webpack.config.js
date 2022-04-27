@@ -1,42 +1,47 @@
+const currentTask = process.env.npm_lifecycle_event
 const path = require("path")
 const HtmlWebpackPlugin = require("html-webpack-plugin")
+const MiniCssExtractPlugin = require("mini-css-extract-plugin")
+const BundleAnalyzerPlugin =
+  require("webpack-bundle-analyzer").BundleAnalyzerPlugin
+const fse = require("fs-extra")
 
-module.exports = {
-  mode: "development",
+let cssConfig = {
+  test: /\.css$/i,
+  use: ["css-loader", "postcss-loader"],
+}
+let pages = fse
+  .readdirSync("./app")
+  .filter(function (file) {
+    return file.endsWith(".html")
+  })
+  .map(function (page) {
+    return new HtmlWebpackPlugin({
+      title: "Clear View Escapes",
+      filename: page,
+      template: `app/${page}`,
+    })
+  })
 
-  target: "web",
-
+//---------------------------------- shared -------------------------------------------------
+let config = {
   entry: { bundle: path.resolve(__dirname, "app/assets/scripts/App.js") },
-
-  output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "[name][contenthash].js",
-    clean: true,
-    assetModuleFilename: "[name][ext]",
-  },
-
-  devServer: {
-    static: {
-      directory: path.resolve(__dirname, "dist"),
-    },
-    port: 3000,
-    host: "0.0.0.0",
-    open: true,
-    hot: true,
-    compress: true,
-    historyApiFallback: true,
-  },
-
   module: {
     rules: [
+      cssConfig,
       {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader", "postcss-loader"],
-      },
-
-      {
-        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        test: /\.(png|jpg|jpeg|gif)$/i,
         type: "asset/resource",
+        generator: {
+          filename: "assets/images/[name][ext]",
+        },
+      },
+      {
+        test: /\.svg$/,
+        type: "asset/resource",
+        generator: {
+          filename: "assets/images/icons/[name][ext]",
+        },
       },
       {
         test: /\.m?js$/,
@@ -50,13 +55,49 @@ module.exports = {
       },
     ],
   },
+  target: "web",
 
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: "Clear View Escapes",
-      filename: "index.html",
-      template: "app/template.html",
-    }),
-    //new BundleAnalyzerPlugin(),
-  ],
+  plugins: pages,
 }
+
+//---------------------------------- development -------------------------------------------------
+if (currentTask == "dev") {
+  cssConfig.use.unshift("style-loader")
+
+  config.mode = "development"
+
+  config.devServer = {
+    static: {
+      directory: path.resolve(__dirname, "app"),
+    },
+    port: 3000,
+    host: "0.0.0.0",
+    open: true,
+    hot: true,
+    compress: true,
+    historyApiFallback: true,
+  }
+  config.plugins.push(new BundleAnalyzerPlugin())
+}
+
+//--------------------------------- production -------------------------------------------------
+if (currentTask == "build") {
+  cssConfig.use.unshift(MiniCssExtractPlugin.loader)
+
+  config.mode = "production"
+  config.output = {
+    path: path.resolve(__dirname, "docs"),
+    filename: "[name][contenthash].js",
+    clean: true,
+    assetModuleFilename: "[name][ext]",
+  }
+  config.optimization = {
+    splitChunks: { chunks: "all" },
+  }
+  config.plugins.push(
+    new MiniCssExtractPlugin({ filename: "styles[contenthash].css" })
+  )
+}
+
+//--------------------------------------------------------------------------------------------------
+module.exports = config
