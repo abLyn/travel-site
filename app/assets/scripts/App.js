@@ -12,6 +12,8 @@ new RevealOnScroll(document.querySelectorAll(".testimonial"), 60)
 new MobileMenu()
 let modal
 
+console.log(require.context("../images", true))
+
 document.querySelectorAll(".open-modal").forEach((el) => {
   el.addEventListener("click", (e) => {
     e.preventDefault()
