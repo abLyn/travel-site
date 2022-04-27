@@ -1,4 +1,5 @@
 import "../styles/styles.css"
+import "lazysizes"
 require.context("../images", true)
 
 import MobileMenu from "./modules/MobileMenu"
