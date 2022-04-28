@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "browser-sync start -p 'http://0.0.0.0:3000/' ",
-    "dev": "webpack-dev-server",
+    "dev":"webpack serve --open --config webpack.config.js",
     "build": "webpack"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "lazysizes": "^5.3.2",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1"

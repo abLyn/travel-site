@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const BundleAnalyzerPlugin =
   require("webpack-bundle-analyzer").BundleAnalyzerPlugin
 const fse = require("fs-extra")
+//-------------------------------------------------------------------------------------------------
 
 let cssConfig = {
   test: /\.css$/i,
@@ -26,6 +27,7 @@ let pages = fse
 //---------------------------------- shared -------------------------------------------------
 let config = {
   entry: { bundle: path.resolve(__dirname, "app/assets/scripts/App.js") },
+  target: "web",
   module: {
     rules: [
       cssConfig,
@@ -55,7 +57,6 @@ let config = {
       },
     ],
   },
-  target: "web",
 
   plugins: pages,
 }
@@ -68,16 +69,19 @@ if (currentTask == "dev") {
 
   config.devServer = {
     static: {
-      directory: path.resolve(__dirname, "app"),
+      directory: path.resolve(__dirname, "dist"),
     },
     port: 3000,
     host: "0.0.0.0",
     open: true,
     hot: true,
+    open: true,
+
     compress: true,
     historyApiFallback: true,
   }
-  config.plugins.push(new BundleAnalyzerPlugin())
+
+  //config.plugins.push(new BundleAnalyzerPlugin())
 }
 
 //--------------------------------- production -------------------------------------------------

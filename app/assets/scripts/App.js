@@ -1,18 +1,22 @@
 import "../styles/styles.css"
 import "lazysizes"
 require.context("../images", true)
-
+//-----------------------------------------------------------------------------------------------
 import MobileMenu from "./modules/MobileMenu"
 import RevealOnScroll from "./modules/RevealOnScroll"
 import StickyHeader from "./modules/StickyHeader"
+import ClientArea from "./modules/ClientArea"
+//-----------------------------------------------------------------------------------------------
+if (module.hot) {
+  module.hot.accept()
+}
 
 new StickyHeader()
 new RevealOnScroll(document.querySelectorAll(".feature-item"), 75)
 new RevealOnScroll(document.querySelectorAll(".testimonial"), 60)
 new MobileMenu()
+new ClientArea()
 let modal
-
-console.log(require.context("../images", true))
 
 document.querySelectorAll(".open-modal").forEach((el) => {
   el.addEventListener("click", (e) => {
@@ -29,7 +33,3 @@ document.querySelectorAll(".open-modal").forEach((el) => {
     }
   })
 })
-
-if (module.hot) {
-  module.hot.accept()
-}
